@@ -65,27 +65,27 @@ def motconR(omega)
 try:
     while rcpy.get_state() != rcpy.EXITING:
         if rcpy.get_state() == rcpy.RUNNING:
-            data , addr = sock.recvfrom(2048)
-            dataload = pickle.loads(data)
-            V = dataload[0]
-            omega = dataload[1]
-            omegaR,omegaL = invkinematic(V,omega)
-            Rpwm = motconR(omegaR)
-            Lpwm = motconL(omegaL)
+			data , addr = sock.recvfrom(2048)
+			dataload = pickle.loads(data)
+			V = dataload[0]
+			omega = dataload[1]
+			omegaR,omegaL = invkinematic(V,omega)
+			Rpwm = motconR(omegaR)
+			Lpwm = motconL(omegaL)
 			mR.set(Rpwm)
 			mL.set(Lpwm)
 			tick1 = encoder.get()
 			tick2 = encoder.get()
 			print(f'encoder count L = {tick1}, encoder count R = {tick2}')
 			time.sleep(0.01)
-        elif rcpy.get_state() == rcpy.PAUSED:
-            mL.free_spin(),mR.free_spin()
-        else:
-            while rcpy.get_state() != rcpy.EXITING:
-                time.sleep(.5)
+		elif rcpy.get_state() == rcpy.PAUSED:
+			mL.free_spin(),mR.free_spin()
+		else:
+			while rcpy.get_state() != rcpy.EXITING:
+				time.sleep(.5)
 except KeyboardInterrupt:
-    print("Done Recived and Control")
-    rcpy.set_state(rcpy.EXITING)
+	print("Done Recived and Control")
+	rcpy.set_state(rcpy.EXITING)
 
 finally:
-    print("Buh Bye")
+	print("Buh Bye")
