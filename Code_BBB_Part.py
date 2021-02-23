@@ -2,7 +2,7 @@
 # Inbound data : V, omega ---> Inverse Kinematic ---> omegaR,omegaL ---> PID ---> Motor Control
 # Outbound data: odometry (X,Y,theta), IMU data <--- Forward Kinematic <--- Encoder, IMU
 # import python Library
-	
+
 import pickle
 import socket
 import time
@@ -38,14 +38,14 @@ rcpy.set_state(rcpy.RUNNING)                #set rcpy state to running
 mL,mR = motor.motor2,motor.motor3           #set motor L and R to 2 and 3
 eL,eR = encoder.encoder2,encoder.encoder3   #set encoder L and R to 2 and 3
 
-def invkinematic(V,omega)
+def invkinematic(V,omega):
 	r = 80 #mm
 	L = 230 #mm
 	omegaR=(V+omega*L)/r
 	omegaL=(V-omega*L)/r
 	return omegaR,omegaL
 
-def motconL(omega)
+def motconL(omega):
 	A=
 	B=
 	pwm = A*x+B
@@ -55,7 +55,7 @@ def motconL(omega)
 		pwm = -1
 	return pwm
 
-def motconR(omega)
+def motconR(omega):
 	A=
 	B=
 	pwm = A*x+B
