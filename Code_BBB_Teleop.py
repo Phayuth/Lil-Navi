@@ -41,8 +41,9 @@ def invkinematic(V,omega):
 	return omegaR,omegaL
 
 def motconL(omega):
-	A=
-	B=
+	# Convert from tick speed to PWM value; range from [0 , 4200]
+	A=0.00023
+	B=0.03306
 	pwm = A*x+B
 	if pwm>1:
 		pwm = 1
@@ -51,8 +52,9 @@ def motconL(omega):
 	return pwm
 
 def motconR(omega):
-	A=
-	B=
+	# Convert from tick speed to PWM value; range from [0 , 4200]
+	A=0.00023
+	B=0.03306
 	pwm = A*x+B
 	if pwm > 1:
 		pwm = 1
@@ -60,13 +62,18 @@ def motconR(omega):
 		pwm = -1
 	return pwm
 
+def udpdta():
+	data , addr = sock.recvfrom(2048)
+	dataload = pickle.loads(data)
+	V = dataload[0]
+	omega = dataload[1]
+	return V,omega
+
 try:
-    while rcpy.get_state() != rcpy.EXITING:
-        if rcpy.get_state() == rcpy.RUNNING:
-			data , addr = sock.recvfrom(2048)
-			dataload = pickle.loads(data)
-			V = dataload[0]
-			omega = dataload[1]
+	while rcpy.get_state() != rcpy.EXITING:
+		if rcpy.get_state() == rcpy.RUNNING:
+			print("Sever is Started and Listening")
+			V,omega = udpdta()
 			omegaR,omegaL = invkinematic(V,omega)
 			Rpwm = motconR(omegaR)
 			Lpwm = motconL(omegaL)
