@@ -9,17 +9,15 @@ import time
 import numpy as np
 #Robot Parameter
 #
-#		______________
-#		|			 |
-# ||	|			 |	   ||
-# ||----|			 |-----|| r = wheel raduis
-# ||	|			 |     ||
-# 		|____________|
+#       ______________
+#       |            |
+# ||    |            |     ||
+# ||----|            |-----|| r = wheel raduis
+# ||    |            |     ||
+#       |____________|
 #
 # <------------------------>
 #   L = Robot base
-r = 0.5 #mm
-L = 0.5 #mm
 
 # import rcpy
 import rcpy
