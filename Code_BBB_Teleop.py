@@ -4,12 +4,12 @@ import pickle
 import socket
 import time
 
-#Robot Parameter
+# Robot Parameter
 #
 #       ______________
 #       |            |
 # ||    |            |     ||
-# ||----|            |-----|| r = wheel raduis
+# ||----|            |-----|| r = wheel radius
 # ||    |            |     ||
 #       |____________|
 #
@@ -19,11 +19,9 @@ import time
 # import rcpy
 import rcpy
 import rcpy.motor as motor
-import rcpy.encoder as encoder
 
 # udp enable and binding
 ip,pt = '192.168.0.104',50505
-ipd,ptd = '192.168.0.105',50506
 sock = socket.socket(socket.AF_INET,SOCK_DGRAM)
 sock.bind((ip,pt))
 #sock.settimeout(1)
@@ -31,31 +29,35 @@ sock.bind((ip,pt))
 # rc
 rcpy.set_state(rcpy.RUNNING)                #set rcpy state to running
 mL,mR = motor.motor2,motor.motor3           #set motor L and R to 2 and 3
-eL,eR = encoder.encoder2,encoder.encoder3   #set encoder L and R to 2 and 3
 
 def invkinematic(V,omega):
-	r = 80 #mm
-	L = 230 #mm
-	omegaR=(V+omega*L)/r
-	omegaL=(V-omega*L)/r
+	r = 65  #mm
+	L = 200 #mm
+	omegaR=(2*V+omega*L)/(2*r)
+	omegaL=(2*V-omega*L)/(2*r)
 	return omegaR,omegaL
 
-def motconL(omega):
-	# Convert from tick speed to PWM value; range from [0 , 4200]
-	A=0.00023
-	B=0.03306
-	pwm = A*x+B
+def motconL(omega):  # 2 motor can be different due to the imperfection of the manufacturing
+	# Convert from desired wheel velocity (rad/s) to PWM value; range from [0 rad/s , 3.22 rad/s]
+	# From curve fit : PWM = 0.0002518*(tick/s)+0.04144
+	# We have : Omega_gear = (2pi/PPR/GR)*(tick/Ts) => (tick/Ts) = (Omega_gear*PPR*GR/2pi)
+	# We get PWM = 0.00025*(Omega_gear*PPR*GR/2pi) + 0.04144
+	# GR = 170 , PPR = 44
+	# PWM = 0.297619*Omega_gear + 0.04144
+	# Omega_gear is in rad/s
+	A=0.297619
+	B=0.04144
+	pwm = A*omega+B
 	if pwm>1:
 		pwm = 1
 	elif pwm <-1:
 		pwm = -1
 	return pwm
 
-def motconR(omega):
-	# Convert from tick speed to PWM value; range from [0 , 4200]
-	A=0.00023
-	B=0.03306
-	pwm = A*x+B
+def motconR(omega):  # 2 motor can be different due to the imperfection of the manufacturing
+	A=0.297619
+	B=0.04144
+	pwm = A*omega+B
 	if pwm > 1:
 		pwm = 1
 	elif pwm < -1:
@@ -79,9 +81,6 @@ try:
 			Lpwm = motconL(omegaL)
 			mR.set(Rpwm)
 			mL.set(Lpwm)
-			tick1 = encoder.get()
-			tick2 = encoder.get()
-			print(f'encoder count L = {tick1}, encoder count R = {tick2}')
 			time.sleep(0.01)
 		elif rcpy.get_state() == rcpy.PAUSED:
 			mL.free_spin(),mR.free_spin()
