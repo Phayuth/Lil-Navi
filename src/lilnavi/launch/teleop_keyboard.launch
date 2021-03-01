@@ -1,0 +1,17 @@
+<launch>
+
+<node 
+  name="lilnavi_teleop"  
+  pkg="lilnavi"  
+  type="teleop.py"
+  output="screen">
+</node>
+  
+<node 
+  name="teleop_KB"  
+  pkg="teleop_twist_keyboard"  
+  type="teleop_twist_keyboard.py" 
+  output="screen">
+</node>
+
+</launch>
