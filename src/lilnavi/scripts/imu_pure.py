@@ -39,17 +39,19 @@ def udprec():
 current_time = rospy.Time.now()
 last_time = rospy.Time.now()
 
+imu = Imu()
+
 print("Started Listening")
 while not rospy.is_shutdown():
 	current_time = rospy.Time.now()
-	
+
 	try:
 		qx,qy,qz,qw,Omex,Omey,ax,ay = udprec()
 	except:
 		pass
-	
+
 	# IMU data
-	imu = Imu()
+	# imu = Imu()
 	imu.header.stamp = current_time
 	imu.header.frame_id = "imu_frame"
 	imu.orientation.x = qx
@@ -58,10 +60,10 @@ while not rospy.is_shutdown():
 	imu.orientation.w = qw
 	imu.angular_velocity = Vector3(Omex,Omey,0)
 	imu.linear_acceleration = Vector3(ax,ay,0)
-	
+
 	# Pub
 	imu_pub.publish(imu)
-	
+
 	# Update
 	last_time=current_time
 	time.sleep(0.01)
