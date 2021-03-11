@@ -35,6 +35,8 @@ def udprec():
 	omega = load[5]
 	return x,y,theta,vx,vy,omega
 
+odom = Odometry()
+
 current_time = rospy.Time.now()
 last_time = rospy.Time.now()
 #r = rospy.Rate(10)
@@ -53,13 +55,13 @@ while not rospy.is_shutdown():
 	odom_broadcaster.sendTransform((x,y,0.),odom_quat,current_time,"base_link","odom") #pose x y,(no z),orien of quat,time,frame_id,frame_id)
 
 	# next , we pub odom message
-	odom = Odometry()
+	# odom = Odometry()
 	odom.header.stamp = current_time
 	odom.header.frame_id = "odom"
 
 	# set pose
 	odom.pose.pose = Pose(Point(x,y,0.),Quaternion(*odom_quat))
-	
+
 	#set velo
 	odom.child_frame_id = "base_link"
 	odom.twist.twist = Twist(Vector3(vx,vy,0),Vector3(0,0,omega))
