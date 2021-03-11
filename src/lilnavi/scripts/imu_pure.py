@@ -44,12 +44,10 @@ imu = Imu()
 print("Started Listening")
 while not rospy.is_shutdown():
 	current_time = rospy.Time.now()
-
 	try:
 		qx,qy,qz,qw,Omex,Omey,ax,ay = udprec()
 	except:
 		pass
-
 	# IMU data
 	# imu = Imu()
 	imu.header.stamp = current_time
