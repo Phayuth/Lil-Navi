@@ -1,6 +1,7 @@
 # Backstepping_Control
 import math
 import numpy as np
+import time
 
 # rcpy lib
 import rcpy
@@ -17,7 +18,7 @@ eL,eR = encoder.encoder2,encoder.encoder3   #set encoder L and R to 2 and 3
 # Reference Pose===================================================================================
 def ref_cicle(t):
 	freq   = 2*math.pi/30
-	radius = 5
+	radius = 2
 
 	x     = radius*math.cos(freq*t)
 	y     = radius*math.sin(freq*t)
@@ -80,17 +81,17 @@ class ddr_lil_robot:
 		"""Forward Kinematic, Determine V and Omega, given each wheel, return: velocity, angular_v"""
 		return ((self.r*Wr/2) + (self.r*Wl/2)),((self.r*Wr/self.b) - (self.r*Wl/self.b))
 
-	def FKE(velocity,angular_v,theta):
+	def FKE(self,velocity,angular_v,theta):
 		"""Determine Velocity in 2D space, return x_dot, y_dot, theta_dot"""
 		return (math.cos(theta)*velocity),(math.sin(theta)*velocity),angular_v
 
 	def invkinematic(self,V,omega):
 		"""Inverse Kinematic for determine each wheel speed, return omegaR,omegaL"""
-		return (2*V+omega*self.b)/(2*self.r),(2*V-omega*self.b)/(2*self.r)
+		return ((2*V)+(omega*self.b))/(2*self.r),((2*V)-(omega*self.b))/(2*self.r)
 
 	def motcon(self,omega,A,B):
 		"""determine PWM value from controller, return pwm"""
-		pwm = A * ((Omega*self.PPR*self.GR)/(2*math.pi)) + B
+		pwm = A * ((omega*self.PPR*self.GR)/(2*math.pi)) + B
 		if pwm>1:
 			pwm = 1
 		elif pwm <-1:
@@ -99,7 +100,7 @@ class ddr_lil_robot:
 
 class backstp_contrl:
 
-	def __init__(self,k1,k2,k3,ka,kb,m,r,b,Inertial):
+	def __init__(self,k1,k2,k3,ka,kb,m,r,b,Iner):
 		self.k1   = k1
 		self.k2   = k2
 		self.k3   = k3
@@ -110,7 +111,7 @@ class backstp_contrl:
 		self.b    = b
 		self.Iner = Iner
 
-	def error(qr,qc):
+	def error(self,qr,qc):
 		"""Calculate error from the current pose to the reference pose. return qe"""
 		theta = qc[2,0]
 
@@ -122,12 +123,11 @@ class backstp_contrl:
 
 	def controlkinematic(self,qe,vr,wr):
 		""" Control Algorithm for Kinematic, return : vc, wc"""
-		return vr*math.cos(qe[2,0])+self.k1*qe[0,0],wr+self.k2*vr*qe[1,0]*self.k3*math.sin(qe[2,0])
+		return (vr*math.cos(qe[2,0]))+self.k1*qe[0,0],wr+(self.k2*vr*qe[1,0])*(self.k3*math.sin(qe[2,0]))
 
 	def controldynamics(self,vdotref,wdotref):
 		""" Control Algorithm for Dynamics, z1= vref-vcur , z2 = wref-wcur, return : tua1c, tua2c """
-		return 1/2*((self.m*self.r*(vdotref+self.ka*z1))+((2*self.r*self.Iner/b)*(wdotref+self.kb*z2))),...
-				1/2*((self.m*self.r*(vdotref+self.ka*z1))-((2*self.r*self.Iner/b)*(wdotref+self.kb*z2)))
+		return 1/2*((self.m*self.r*(vdotref+self.ka*z1))+((2*self.r*self.Iner/b)*(wdotref+self.kb*z2))),1/2*((self.m*self.r*(vdotref+self.ka*z1))-((2*self.r*self.Iner/b)*(wdotref+self.kb*z2)))
 
 # Initial Pose
 qc = np.array([[0],[0],[0]])
@@ -135,7 +135,7 @@ Ts = 0.01
 tick1_O = 0
 tick2_O = 0
 
-robot = ddr_lil_robot(170,44,0.065,0.200) #GR = 170 PPR = 44 r = 0.065m b = 0.200m
+robot = ddr_lil_robot(170,44,0.065,0.2) #GR = 170 PPR = 44 r = 0.065m b = 0.200m
 contl = backstp_contrl(10,5,4,100,3000,4,0.065,0.2,2.5)#k1 = 10 k2 = 5 k3 = 4 ka = 100 kb = 3000 need tuning
                                                        #mass = 4 kg, radius = 0.03 m, length   = 0.3 m, Inertial = 2.5 kg*m^2
 
@@ -163,8 +163,8 @@ try:
 			tick2 = eR.get()
 
 			# Find OmegaL and OmegaR
-			Wl = (thetawheel(tick1) - thetawheel(tick1_O))/Ts
-			Wr = (thetawheel(tick2) - thetawheel(tick2_O))/Ts
+			Wl = (robot.thetawheel(tick1) - robot.thetawheel(tick1_O))/Ts
+			Wr = (robot.thetawheel(tick2) - robot.thetawheel(tick2_O))/Ts
 
 			# Find V and Omega
 			V,omega = robot.FKI(Wr,Wl)
