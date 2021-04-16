@@ -72,25 +72,25 @@ class ddr_lil_robot:
 		self.r   = r
 		self.b   = b
 
-	def thetawheel(tick):
+	def thetawheel(self,tick):
 		""""find theta wheel after gear ratio, given the encoder tick count, return: theta_w"""
-		return (2*math.pi*tick)/(PPR*GR) # rad
+		return (2*math.pi*tick)/(self.PPR*self.GR) # rad
 
-	def FKI(Wr,Wl):# Forward Kinematic Internal
+	def FKI(self,Wr,Wl):# Forward Kinematic Internal
 		"""Forward Kinematic, Determine V and Omega, given each wheel, return: velocity, angular_v"""
-		return ((r*Wr/2) + (r*Wl/2)),((r*Wr/b) - (r*Wl/b))
+		return ((self.r*Wr/2) + (self.r*Wl/2)),((self.r*Wr/self.b) - (self.r*Wl/self.b))
 
 	def FKE(velocity,angular_v,theta):
 		"""Determine Velocity in 2D space, return x_dot, y_dot, theta_dot"""
 		return (math.cos(theta)*velocity),(math.sin(theta)*velocity),angular_v
 
-	def invkinematic(V,omega):
+	def invkinematic(self,V,omega):
 		"""Inverse Kinematic for determine each wheel speed, return omegaR,omegaL"""
-		return (2*V+omega*b)/(2*r),(2*V-omega*b)/(2*r)
+		return (2*V+omega*self.b)/(2*self.r),(2*V-omega*self.b)/(2*self.r)
 
-	def motcon(omega,A,B):
+	def motcon(self,omega,A,B):
 		"""determine PWM value from controller, return pwm"""
-		pwm = A * ((Omega*PPR*GR)/(2*math.pi)) + B
+		pwm = A * ((Omega*self.PPR*self.GR)/(2*math.pi)) + B
 		if pwm>1:
 			pwm = 1
 		elif pwm <-1:
@@ -99,16 +99,16 @@ class ddr_lil_robot:
 
 class backstp_contrl:
 
-	def __init__(self,k1,k2,k3,ka,kb,mass,r,b,Inertial):
+	def __init__(self,k1,k2,k3,ka,kb,m,r,b,Inertial):
 		self.k1   = k1
 		self.k2   = k2
 		self.k3   = k3
 		self.ka   = ka
 		self.kb   = kb
-		self.mass = mass
+		self.m    = m
 		self.r    = r
 		self.b    = b
-		self.Inertial = Inertial
+		self.Iner = Iner
 
 	def error(qr,qc):
 		"""Calculate error from the current pose to the reference pose. return qe"""
@@ -120,14 +120,14 @@ class backstp_contrl:
 
 		return T @ (qr - qc) # (3X1)
 
-	def controlkinematic(qe,vr,wr):
+	def controlkinematic(self,qe,vr,wr):
 		""" Control Algorithm for Kinematic, return : vc, wc"""
-		return vr*math.cos(qe[2,0])+k1*qe[0,0],wr+k2*vr*qe[1,0]*k3*math.sin(qe[2,0])
+		return vr*math.cos(qe[2,0])+self.k1*qe[0,0],wr+self.k2*vr*qe[1,0]*self.k3*math.sin(qe[2,0])
 
-	def controldynamics(vdotref,wdotref):
+	def controldynamics(self,vdotref,wdotref):
 		""" Control Algorithm for Dynamics, z1= vref-vcur , z2 = wref-wcur, return : tua1c, tua2c """
-		return 1/2*((mass*r*(vdotref+ka*z1))+((2*r*Inertial/b)*(wdotref+kb*z2))),...
-				1/2*((mass*r*(vdotref+ka*z1))-((2*r*Inertial/b)*(wdotref+kb*z2)))
+		return 1/2*((self.m*self.r*(vdotref+self.ka*z1))+((2*self.r*self.Iner/b)*(wdotref+self.kb*z2))),...
+				1/2*((self.m*self.r*(vdotref+self.ka*z1))-((2*self.r*self.Iner/b)*(wdotref+self.kb*z2)))
 
 # Initial Pose
 qc = np.array([[0],[0],[0]])
