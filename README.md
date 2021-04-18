@@ -5,4 +5,5 @@ A Differential Drive Wheel Mobile Robot that use Jetson Nano, Beaglebone Blue an
 $ git status
 $ git commit -a
 $ git push
+$ git pull
 ```
