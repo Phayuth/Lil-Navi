@@ -144,7 +144,7 @@ try:
 		if rcpy.get_state() == rcpy.RUNNING:
 
 			# Control
-			xRef,yRef,vr,wr,ydot,xdot,vdotref,wdotref = ref_cicle(Ts)
+			xRef,yRef,vr,wr,ydot,xdot,vdotref,wdotref = ref_cicle(Ts*100)
 			theta_ref = math.atan2(ydot, xdot)
 			qr = np.array([[xRef],[yRef],[theta_ref]])
 			qe = contl.error(qr,qc)
