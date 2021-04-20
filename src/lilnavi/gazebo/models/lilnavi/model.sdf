@@ -1,0 +1,265 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+	<model name="lilnavi">
+
+		<static>false</static>
+
+		<link name='chassis'>
+			<pose>0 0 0 0 0 0</pose>
+			<collision name='collision'>
+				<geometry>
+					<box>
+						<size>.19 .19 .004</size>
+					</box>
+				</geometry>
+			</collision>
+
+			<visual name='visual'>
+				<geometry>
+					<box>
+						<size>.19 .19 .004</size>
+					</box>
+				</geometry>
+			</visual>
+
+			<collision name='motor_collision'>
+				<pose>0 0 -0.022 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>.19 .04 .04</size>
+					</box>
+				</geometry>
+			</collision>
+
+			<visual name='motor_visual'>
+				<pose>0 0 -0.022 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>.19 .04 .04</size>
+					</box>
+				</geometry>
+			</visual>
+
+			<collision name='mid_collision'>
+				<pose>0 0 0.0295 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>.12 .12 .055</size>
+					</box>
+				</geometry>
+			</collision>
+
+			<visual name='mid_visual'>
+				<pose>0 0 0.0295 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>.12 .12 .055</size>
+					</box>
+				</geometry>
+			</visual>
+
+			<collision name='casterfront_collision'>
+				<pose>0 0.0775 -0.017 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>0.025 0.025 0.03</size>
+					</box>
+				</geometry>
+			</collision>
+
+			<visual name='casterfront_visual'>
+				<pose>0 0.0775 -0.017 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>0.025 0.025 0.03</size>
+					</box>
+				</geometry>
+			</visual>
+
+
+			<collision name='casterwheelfront_collision'>
+				<pose>0 0.0775 -0.032 0 0 0</pose>
+				<geometry>
+					<sphere>
+						<radius>0.02</radius> <!--0.0285-->
+					</sphere>
+				</geometry>
+
+				<surface>
+					<friction>
+						<ode>
+							<mu>0</mu>
+							<mu2>0</mu2>
+							<slip1>1.0</slip1>
+							<slip2>1.0</slip2>
+						</ode>
+					</friction>
+				</surface>
+			</collision>
+
+			<visual name='casterwheelfront_visual'>
+				<pose>0 0.0775 -0.032 0 0 0</pose>
+				<geometry>
+					<sphere>
+						<radius>0.02</radius> <!--0.0285-->
+					</sphere>
+				</geometry>
+			</visual>
+
+
+			<collision name='casterback_collision'>
+				<pose>0 -0.0775 -0.017 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>0.025 0.025 0.03</size>
+					</box>
+				</geometry>
+			</collision>
+
+			<visual name='casterback_visual'>
+				<pose>0 -0.0775 -0.017 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>0.025 0.025 0.03</size>
+					</box>
+				</geometry>
+			</visual>
+
+
+			<collision name='casterwheelback_collision'>
+				<pose>0 -0.0775 -0.032 0 0 0</pose>
+				<geometry>
+					<sphere>
+						<radius>0.02</radius> <!--0.0285-->
+					</sphere>
+				</geometry>
+
+				<surface>
+					<friction>
+						<ode>
+							<mu>0</mu>
+							<mu2>0</mu2>
+							<slip1>1.0</slip1>
+							<slip2>1.0</slip2>
+						</ode>
+					</friction>
+				</surface>
+			</collision>
+
+			<visual name='casterwheelback_visual'>
+				<pose>0 -0.0775 -0.032 0 0 0</pose>
+				<geometry>
+					<sphere>
+						<radius>0.02</radius> <!--0.0285-->
+					</sphere>
+				</geometry>
+			</visual>
+
+
+			<collision name="lidarsup_collision">
+				<pose>0 0 0.072 0 0 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.03</length>
+					</cylinder>
+				</geometry>
+			</collision>
+
+			<visual name="lidarsup_visual">
+				<pose>0 0 0.072 0 0 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.03</length>
+					</cylinder>
+				</geometry>
+			</visual>
+		</link>
+
+		<link name="left_wheel">
+			<pose>-0.1105 0 -0.022 0 1.57 0</pose>
+
+			<collision name="collision">
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.027</length>
+					</cylinder>
+				</geometry>
+			</collision>
+
+			<visual name="visual">
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.027</length>
+					</cylinder>
+				</geometry>
+			</visual>
+		</link>
+
+		<link name="right_wheel">
+			<pose>0.1105 0 -0.022 0 1.57 0</pose>
+
+			<collision name="collision">
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.027</length>
+					</cylinder>
+				</geometry>
+			</collision>
+
+			<visual name="visual">
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.027</length>
+					</cylinder>
+				</geometry>
+			</visual>
+		</link>
+
+		<!--link name="lidar">
+			<pose>0 0 0.097 0 0 0</pose>
+
+			<collision name="collision">
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.01</length>
+					</cylinder>
+				</geometry>
+			</collision>
+
+			<visual name="visual">
+				<geometry>
+					<cylinder>
+						<radius>0.0325</radius>
+						<length>0.01</length>
+					</cylinder>
+				</geometry>
+			</visual>
+		</link-->
+
+		<joint type="revolute" name="left_wheel_hinge">
+			<pose>0 0 0.015500 0 0 0</pose>
+			<child>left_wheel</child>
+			<parent>chassis</parent>
+			<axis>
+				<xyz>1 0 0</xyz> <!-- what axis that it going to rotate about-->
+			</axis>
+		</joint>
+
+		<joint type="revolute" name="right_wheel_hinge">
+			<pose>0 0 -0.015500 0 0 0</pose>
+			<child>right_wheel</child>
+			<parent>chassis</parent>
+			<axis>
+				<xyz>1 0 0</xyz> <!-- what axis that it going to rotate about-->
+			</axis>
+		</joint>
+
+	</model>
+</sdf>
