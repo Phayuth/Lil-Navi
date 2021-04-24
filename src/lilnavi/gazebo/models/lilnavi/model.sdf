@@ -6,10 +6,20 @@
 
 		<link name='chassis'>
 			<pose>0 0 0 0 0 0</pose>
+
+			<inertial>
+				<mass>10</mass>
+				<inertia>
+					<ixx>0.290179</ixx>
+					<iyy>0.355055</iyy>
+					<izz>0.400689</izz>
+				</inertia>
+			</inertial>
+
 			<collision name='collision'>
 				<geometry>
 					<box>
-						<size>.19 .19 .004</size>
+						<size>.19 .04 .04</size>
 					</box>
 				</geometry>
 			</collision>
@@ -17,31 +27,43 @@
 			<visual name='visual'>
 				<geometry>
 					<box>
-						<size>.19 .19 .004</size>
+						<size>.19 .04 .04</size>
 					</box>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>77 0 255 1</ambient>
+					<diffuse>77 0 255 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
-			<collision name='motor_collision'>
-				<pose>0 0 -0.022 0 0 0</pose>
+			<collision name='baseplate_collision'>
+				<pose>0 0 0.022 0 0 0</pose>
 				<geometry>
 					<box>
-						<size>.19 .04 .04</size>
+						<size>.19 .19 .004</size>
 					</box>
 				</geometry>
 			</collision>
 
-			<visual name='motor_visual'>
-				<pose>0 0 -0.022 0 0 0</pose>
+			<visual name='baseplate_visual'>
+				<pose>0 0 0.022 0 0 0</pose>
 				<geometry>
 					<box>
-						<size>.19 .04 .04</size>
+						<size>.19 .19 .004</size>
 					</box>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>255 0 0 1</ambient>
+					<diffuse>255 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
 			<collision name='mid_collision'>
-				<pose>0 0 0.0295 0 0 0</pose>
+				<pose>0 0 0.0515 0 0 0</pose>
 				<geometry>
 					<box>
 						<size>.12 .12 .055</size>
@@ -50,16 +72,22 @@
 			</collision>
 
 			<visual name='mid_visual'>
-				<pose>0 0 0.0295 0 0 0</pose>
+				<pose>0 0 0.0515 0 0 0</pose>
 				<geometry>
 					<box>
 						<size>.12 .12 .055</size>
 					</box>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>238 238 81 1</ambient>
+					<diffuse>238 238 81 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
 			<collision name='casterfront_collision'>
-				<pose>0 0.0775 -0.017 0 0 0</pose>
+				<pose>0 0.0775 0.005 0 0 0</pose>
 				<geometry>
 					<box>
 						<size>0.025 0.025 0.03</size>
@@ -68,20 +96,26 @@
 			</collision>
 
 			<visual name='casterfront_visual'>
-				<pose>0 0.0775 -0.017 0 0 0</pose>
+				<pose>0 0.0775 0.005 0 0 0</pose>
 				<geometry>
 					<box>
 						<size>0.025 0.025 0.03</size>
 					</box>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>255 183 0 1</ambient>
+					<diffuse>255 183 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
 
 			<collision name='casterwheelfront_collision'>
-				<pose>0 0.0775 -0.032 0 0 0</pose>
+				<pose>0 0.0775 -0.010 0 0 0</pose>
 				<geometry>
 					<sphere>
-						<radius>0.02</radius> <!--0.0285-->
+						<radius>0.0225</radius> <!--0.0285-->
 					</sphere>
 				</geometry>
 
@@ -98,17 +132,23 @@
 			</collision>
 
 			<visual name='casterwheelfront_visual'>
-				<pose>0 0.0775 -0.032 0 0 0</pose>
+				<pose>0 0.0775 -0.010 0 0 0</pose>
 				<geometry>
 					<sphere>
-						<radius>0.02</radius> <!--0.0285-->
+						<radius>0.0225</radius> <!--0.0285-->
 					</sphere>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>0 215 255 1</ambient>
+					<diffuse>0 215 255 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
 
 			<collision name='casterback_collision'>
-				<pose>0 -0.0775 -0.017 0 0 0</pose>
+				<pose>0 -0.0775 0.005 0 0 0</pose>
 				<geometry>
 					<box>
 						<size>0.025 0.025 0.03</size>
@@ -117,20 +157,26 @@
 			</collision>
 
 			<visual name='casterback_visual'>
-				<pose>0 -0.0775 -0.017 0 0 0</pose>
+				<pose>0 -0.0775 0.005 0 0 0</pose>
 				<geometry>
 					<box>
 						<size>0.025 0.025 0.03</size>
 					</box>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>255 183 0 1</ambient>
+					<diffuse>255 183 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
 
 			<collision name='casterwheelback_collision'>
-				<pose>0 -0.0775 -0.032 0 0 0</pose>
+				<pose>0 -0.0775 -0.010 0 0 0</pose>
 				<geometry>
 					<sphere>
-						<radius>0.02</radius> <!--0.0285-->
+						<radius>0.0225</radius> <!--0.0285-->
 					</sphere>
 				</geometry>
 
@@ -147,17 +193,23 @@
 			</collision>
 
 			<visual name='casterwheelback_visual'>
-				<pose>0 -0.0775 -0.032 0 0 0</pose>
+				<pose>0 -0.0775 -0.010 0 0 0</pose>
 				<geometry>
 					<sphere>
-						<radius>0.02</radius> <!--0.0285-->
+						<radius>0.0225</radius> <!--0.0285-->
 					</sphere>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>0 215 255 1</ambient>
+					<diffuse>0 215 255 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 
 
 			<collision name="lidarsup_collision">
-				<pose>0 0 0.072 0 0 0</pose>
+				<pose>0 0 0.092 0 0 0</pose>
 				<geometry>
 					<cylinder>
 						<radius>0.0325</radius>
@@ -167,18 +219,36 @@
 			</collision>
 
 			<visual name="lidarsup_visual">
-				<pose>0 0 0.072 0 0 0</pose>
+				<pose>0 0 0.092 0 0 0</pose>
 				<geometry>
 					<cylinder>
 						<radius>0.0325</radius>
 						<length>0.03</length>
 					</cylinder>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>88 0 255 1</ambient>
+					<diffuse>88 0 255 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 		</link>
 
 		<link name="left_wheel">
-			<pose>-0.1105 0 -0.022 0 1.57 0</pose>
+			<pose>-0.1105 0 0 0 1.57 0</pose>
+
+			<inertial>
+				<mass>0.895943</mass>
+				<!--inertia>
+					<ixx>0.00002910</ixx>
+					<ixy>0</ixy>
+					<ixz>0</ixz>
+					<iyy>0.00002910</iyy>
+					<iyz>0</iyz>
+					<izz>0.00004732</izz>
+				</inertia-->
+			</inertial>
 
 			<collision name="collision">
 				<geometry>
@@ -196,11 +266,29 @@
 						<length>0.027</length>
 					</cylinder>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>0 0 0 1</ambient>
+					<diffuse>0 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 		</link>
 
 		<link name="right_wheel">
-			<pose>0.1105 0 -0.022 0 1.57 0</pose>
+			<pose>0.1105 0 0 0 1.57 0</pose>
+
+			<inertial>
+				<mass>0.895943</mass>
+				<!--inertia>
+					<ixx>0.00002910</ixx>
+					<ixy>0</ixy>
+					<ixz>0</ixz>
+					<iyy>0.00002910</iyy>
+					<iyz>0</iyz>
+					<izz>0.00004732</izz>
+				</inertia-->
+			</inertial>
 
 			<collision name="collision">
 				<geometry>
@@ -218,11 +306,29 @@
 						<length>0.027</length>
 					</cylinder>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>0 0 0 1</ambient>
+					<diffuse>0 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
 		</link>
 
-		<!--link name="lidar">
-			<pose>0 0 0.097 0 0 0</pose>
+		<link name="lidar_link">
+			<pose>0 0 0.114 0 0 0</pose> <!--Gap of 2mm-->
+
+			<inertial>
+				<mass>0.6</mass>
+				<!--inertia>
+					<ixx>0.00001974</ixx>
+					<ixy>0</ixy>
+					<ixz>0</ixz>
+					<iyy>0.00001974</iyy>
+					<iyz>0</iyz>
+					<izz>0.00003505</izz>
+				</inertia-->
+			</inertial>
 
 			<collision name="collision">
 				<geometry>
@@ -240,11 +346,104 @@
 						<length>0.01</length>
 					</cylinder>
 				</geometry>
+				<material> <!-- material -->
+					<ambient>0.1 0.1 0.1 1</ambient>
+					<diffuse>0.1 0.1 0.2 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
 			</visual>
-		</link-->
+
+			<sensor type="gpu_ray" name="head_hokuyo_sensor">
+				<pose>0 0 0 0 0 0</pose>
+				<visualize>true</visualize>
+				<update_rate>40</update_rate>
+				<ray>
+					<scan>
+						<horizontal>
+							<samples>720</samples>
+							<resolution>1</resolution>
+							<min_angle>-3.14159</min_angle>  <!--min_angle>-1.570796</min_angle-->
+							<max_angle>3.14159</max_angle>   <!--max_angle>1.570796</max_angle-->
+						</horizontal>
+					</scan>
+					<range>
+						<min>0.10</min>
+						<max>12.0</max>
+						<resolution>0.01</resolution>
+					</range>
+					<noise>
+						<type>gaussian</type>
+						<mean>0.0</mean>
+						<stddev>0.01</stddev>
+					</noise>
+				</ray>
+				<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
+					<topicName>/laser/scan</topicName>
+					<frameName>lidar_link</frameName>
+				</plugin>
+			</sensor>
+		</link>
+
+		<link name="imu_link">
+			<pose>0 0.075 0.029 0 0 0</pose> <!--Gap of 2mm-->
+
+			<inertial>
+				<mass>0.05</mass>
+				<!--inertia>
+					<ixx>0.00000002</ixx>
+					<ixy>0</ixy>
+					<ixz>0</ixz>
+					<iyy>0.00000002</iyy>
+					<iyz>0</iyz>
+					<izz>0.00000002</izz>
+				</inertia-->
+			</inertial>
+
+			<collision name="collision">
+				<geometry>
+					<box>
+						<size>0.01 0.01 0.01</size>
+					</box>
+				</geometry>
+			</collision>
+
+			<visual name="visual">
+				<geometry>
+					<box>
+						<size>0.01 0.01 0.01</size>
+					</box>
+				</geometry>
+				<material> <!-- material -->
+					<ambient>0.1 0.1 0.1 1</ambient>
+					<diffuse>0.1 0.1 0.2 1</diffuse>
+					<specular>0 0 0 0</specular>
+					<emissive>0 0 0 1</emissive>
+				</material> <!--material -->
+			</visual>
+
+			<gravity>true</gravity>
+			<sensor name="imu_sensor" type="imu">
+				<always_on>true</always_on>
+				<update_rate>100</update_rate>
+				<visualize>true</visualize>
+				<topic>__default_topic__</topic>
+				<plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+					<topicName>imu</topicName>
+					<bodyName>imu_link</bodyName>
+					<updateRateHZ>10.0</updateRateHZ>
+					<gaussianNoise>0.0</gaussianNoise>
+					<xyzOffset>0 0 0</xyzOffset>
+					<rpyOffset>0 0 0</rpyOffset>
+					<frameName>imu_link</frameName>
+					<initialOrientationAsReference>false</initialOrientationAsReference>
+				</plugin>
+				<pose>0 0 0 0 0 0</pose>
+			</sensor>
+		</link>
 
 		<joint type="revolute" name="left_wheel_hinge">
-			<pose>0 0 0.015500 0 0 0</pose>
+			<pose>0 0 0.0155 0 0 0</pose>
 			<child>left_wheel</child>
 			<parent>chassis</parent>
 			<axis>
@@ -253,7 +452,7 @@
 		</joint>
 
 		<joint type="revolute" name="right_wheel_hinge">
-			<pose>0 0 -0.015500 0 0 0</pose>
+			<pose>0 0 -0.0155 0 0 0</pose>
 			<child>right_wheel</child>
 			<parent>chassis</parent>
 			<axis>
@@ -261,5 +460,38 @@
 			</axis>
 		</joint>
 
+		<joint type="fixed" name="lidar_joint">
+			<pose>0 0 -0.007 0 0 0</pose>
+			<child>lidar_link</child>
+			<parent>chassis</parent>
+			<axis>
+				<xyz>0 0 1</xyz> <!-- what axis that it going to rotate about-->
+			</axis>
+		</joint>
+
+		<joint type="fixed" name="imu_joint">
+			<pose>0 0 -0.005 0 0 0</pose>
+			<child>imu_link</child>
+			<parent>chassis</parent>
+			<axis>
+				<xyz>0 0 1</xyz> <!-- what axis that it going to rotate about-->
+			</axis>
+		</joint>
+		<!-- diff drive plugin here-->
+		<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+			<legacyMode>false</legacyMode>
+			<!--alwaysOn>true</alwaysOn-->
+			<updateRate>20</updateRate>
+			<leftJoint>left_wheel_hinge</leftJoint>
+			<rightJoint>right_wheel_hinge</rightJoint>
+			<wheelSeparation>0.19</wheelSeparation>
+			<wheelDiameter>0.065</wheelDiameter>
+			<torque>20</torque><!--torque>20</torque-->
+			<commandTopic>cmd_vel</commandTopic>
+			<odometryTopic>odom</odometryTopic>
+			<odometryFrame>odom</odometryFrame>
+			<robotBaseFrame>chassis</robotBaseFrame>
+		</plugin>
+		<!-- diff drive plugin here-->
 	</model>
 </sdf>
