@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<launch>
+  <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 robotros_test/chassis lidar_link 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="base_to_imu___broadcaster" args="0 0 0 0 0 0 robotros_test/chassis imu_link 100"/>
+</launch>
