@@ -352,7 +352,7 @@
 			<robotBaseFrame>chassis</robotBaseFrame>
 
 			<!-- Odometry source, encoder, world, defaults to world -->
-			<odometrySource>encoder</odometrySource>
+			<odometrySource>world</odometrySource>
 
 			<!-- Set to true to publish transforms for the wheel links, defaults to false -->
 			<publishWheelTF>true</publishWheelTF>
