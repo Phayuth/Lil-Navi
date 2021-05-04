@@ -20,7 +20,7 @@ class odomest(object):
 
 		rospy.Subscriber('/robotros_test/odom',Odometry, self.odomcall)
 
-		self.odom_pub = rospy.Publisher("/odomer", Odometry, queue_size = 50)
+		self.odom_pub = rospy.Publisher("/poseodom_pure", Odometry, queue_size = 50)
 
 	def odomcall(self,msg):
 		v = msg.twist.twist.linear.x

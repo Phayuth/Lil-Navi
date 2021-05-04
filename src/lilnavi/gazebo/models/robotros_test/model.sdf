@@ -184,8 +184,8 @@
 					</cylinder>
 				</geometry>
 				<material> <!-- material -->
-					<ambient>0.1 0.1 0.1 1</ambient>
-					<diffuse>0.1 0.1 0.2 1</diffuse>
+					<ambient>35 230 106 1</ambient>
+					<diffuse>35 230 106 1</diffuse>
 					<specular>0 0 0 0</specular>
 					<emissive>0 0 0 1</emissive>
 				</material> <!--material -->
@@ -252,8 +252,8 @@
 					</box>
 				</geometry>
 				<material> <!-- material -->
-					<ambient>0.1 0.1 0.1 1</ambient>
-					<diffuse>0.1 0.1 0.2 1</diffuse>
+					<ambient>35 230 106 1</ambient>
+					<diffuse>35 230 106 1</diffuse>
 					<specular>0 0 0 0</specular>
 					<emissive>0 0 0 1</emissive>
 				</material> <!--material -->
@@ -269,7 +269,7 @@
 					<topicName>imu</topicName>
 					<bodyName>imu_link</bodyName>
 					<updateRateHZ>10.0</updateRateHZ>
-					<gaussianNoise>0.0</gaussianNoise>
+					<gaussianNoise>0.1</gaussianNoise>
 					<xyzOffset>0 0 0</xyzOffset>
 					<rpyOffset>0 0 0</rpyOffset>
 					<frameName>imu_link</frameName>
@@ -352,7 +352,7 @@
 			<robotBaseFrame>chassis</robotBaseFrame>
 
 			<!-- Odometry source, encoder, world, defaults to world -->
-			<odometrySource>world</odometrySource>
+			<odometrySource>encoder</odometrySource>
 
 			<!-- Set to true to publish transforms for the wheel links, defaults to false -->
 			<publishWheelTF>true</publishWheelTF>
@@ -368,6 +368,17 @@
 			<legacyMode>false</legacyMode>
 
 			<publishTf>1</publishTf> <!--1-->
+		</plugin>
+
+		<plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+			<alwaysOn>true</alwaysOn>
+			<updateRate>20</updateRate>
+			<bodyName>chassis</bodyName>
+			<topicName>ground_truth/state</topicName>
+			<gaussianNoise>0.02</gaussianNoise>
+			<frameName>map</frameName>
+			<xyzOffsets>0 0 0</xyzOffsets>
+			<rpyOffsets>0 0 0</rpyOffsets>
 		</plugin>
 	</model>
 </sdf>
