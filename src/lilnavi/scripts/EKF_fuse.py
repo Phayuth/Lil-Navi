@@ -12,12 +12,17 @@ from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, Pose2D
 
 class EKF_node(object):
 	def __init__(self,x,p):
+
 		# Value store
+
+		# encoder
 		self.V_odom = 0
 		self.w_odom = 0
-		self.w_imu  = 0
+
+		# measure
 		self.x_lidr = 0
 		self.y_lidr = 0
+		self.t_imu  = 0
 
 		self.prev_x = x
 		self.prev_p = p
@@ -27,7 +32,7 @@ class EKF_node(object):
 		self.est_p  = self.prev_p
 
 		# Loop rate
-		self.loopr = rospy.Rate(10)
+		self.loopr = rospy.Rate(20)
 
 		# Subscribe
 		rospy.Subscriber('/robotros_test/odom',Odometry, self.read_odom)
@@ -38,17 +43,22 @@ class EKF_node(object):
 		self.pub = rospy.Publisher("/odom_filter", Odometry, queue_size = 50)
 
 	def read_odom(self,msg):
-		self.V_odom = msg.twist.twist.linear.x
-		self.w_odom = msg.twist.twist.angular.z
+		self.V_odom = msg.twist.twist.linear.x + np.random.normal(0,0.1) # noise std = 0.1
+		self.w_odom = msg.twist.twist.angular.z + np.random.normal(0,0.1)# noise std = 0.1
+
 	def read_lidr(self,msg):
 		self.x_lidr = msg.x
 		self.y_lidr = msg.y
+
 	def read_imu(self,msg):
-		self.w_imu = msg.angular_velocity.z*0.01
+		(r,p,y) = tf.transformations.euler_from_quaternion([msg.orientation.x,msg.orientation.y,msg.orientation.z,msg.orientation.w])
+		# if y<0:
+		# 	y = np.pi + (np.pi+y)
+		self.t_imu = y
 
 	def ekf_pre(self,V_odom,w_odom):
-		Ts = 0.01
-		Q = np.diag([0.1,0.1,0.1])
+		Ts = 0.02
+		Q = np.diag([0.1,0.1,0.1])**2
 		JF = np.array([[1,0,-V_odom*np.sin(self.prev_x[2,0])*Ts],
 			           [0,1, V_odom*np.cos(self.prev_x[2,0])*Ts],
 			           [0,0,1]])
@@ -58,14 +68,16 @@ class EKF_node(object):
 		self.pred_p = JF.dot(self.prev_p).dot(JF.T)+Q
 
 	def ekf_upd(self,x_meas):
-		Ts = 0.01
-		R = np.diag([0.1,0.1,0.1])
-		JH = np.array([[1,0,0],[0,0,1],[0,0,Ts]])
+		Ts = 0.02
+		R = np.diag([0.1,0.1,0.1])**2
+		JH = np.array([[1,0,0],[0,0,1],[0,0,1]])
 		y = x_meas - self.pred_x
 		s = JH.dot(self.pred_p).dot(JH.T) + R
 		k = self.pred_p.dot(JH.T).dot(np.linalg.inv(s))
 		self.est_x = self.pred_x + k.dot(y)
 		self.est_p = (np.eye(3) - k.dot(JH)).dot(self.pred_p)
+		self.prev_x = self.est_x
+		self.prev_p = self.est_p
 
 
 if __name__ == '__main__':
@@ -75,7 +87,7 @@ if __name__ == '__main__':
 
 	while not rospy.is_shutdown():
 		nod.ekf_pre(nod.V_odom,nod.w_odom)
-		meas = np.array([[nod.x_lidr],[nod.y_lidr],[nod.w_imu]])
+		meas = np.array([[nod.x_lidr],[nod.y_lidr],[nod.t_imu]])
 		nod.ekf_upd(meas)
 		odom_broadcaster = tf.TransformBroadcaster()
 		odom = Odometry()

@@ -193,7 +193,7 @@
 
 			<sensor type="gpu_ray" name="head_hokuyo_sensor">
 				<pose>0 0 0.020 0 0 0</pose>
-				<visualize>true</visualize>
+				<visualize>false</visualize>
 				<update_rate>40</update_rate>
 				<ray>
 					<scan>
@@ -268,8 +268,8 @@
 				<plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
 					<topicName>imu</topicName>
 					<bodyName>imu_link</bodyName>
-					<updateRateHZ>10.0</updateRateHZ>
-					<gaussianNoise>0.1</gaussianNoise>
+					<updateRateHZ>10</updateRateHZ><!--10-->
+					<gaussianNoise>0</gaussianNoise><!--0.1-->
 					<xyzOffset>0 0 0</xyzOffset>
 					<rpyOffset>0 0 0</rpyOffset>
 					<frameName>imu_link</frameName>
@@ -328,7 +328,7 @@
 			<rightJoint>right_wheel_hinge</rightJoint>
 
 			<!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
-			<wheelSeparation>0.2</wheelSeparation>
+			<wheelSeparation>0.26</wheelSeparation>
 
 			<!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
 			<wheelDiameter>0.2</wheelDiameter>
@@ -355,14 +355,14 @@
 			<odometrySource>encoder</odometrySource>
 
 			<!-- Set to true to publish transforms for the wheel links, defaults to false -->
-			<publishWheelTF>true</publishWheelTF>
+			<publishWheelTF>false</publishWheelTF><!--true-->
 
 			<!-- Set to true to publish transforms for the odometry, defaults to true -->
-			<publishOdometry>true</publishOdometry>
+			<publishOdometry>false</publishOdometry><!--true-->
 
-			<publishOdomTF>true</publishOdomTF> <!--true-->
+			<publishOdomTF>false</publishOdomTF> <!--true-->
 			<!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
-			<publishWheelJointState>true</publishWheelJointState>
+			<publishWheelJointState>false</publishWheelJointState>
 
 			<!-- Set to true to swap right and left wheels, defaults to true -->
 			<legacyMode>false</legacyMode>
@@ -375,7 +375,7 @@
 			<updateRate>20</updateRate>
 			<bodyName>chassis</bodyName>
 			<topicName>ground_truth/state</topicName>
-			<gaussianNoise>0.02</gaussianNoise>
+			<gaussianNoise>0</gaussianNoise><!--0.1-->
 			<frameName>map</frameName>
 			<xyzOffsets>0 0 0</xyzOffsets>
 			<rpyOffsets>0 0 0</rpyOffsets>
