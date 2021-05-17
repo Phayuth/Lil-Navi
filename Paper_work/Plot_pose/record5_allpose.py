@@ -23172,13 +23172,13 @@ y_pose2d = y_pose2d[0:350]
 # end trim data ====================================================================
 
 plt.plot(x_gts,y_gts,label="Reference Trajactory")
-plt.plot(x_gts_noise,y_gts_noise,label="Ground_Truth")
-plt.plot(x_encoder,y_encoder,'-r.',linewidth=0.01,markersize=4,label="Encoder_Only")
+plt.plot(x_gts_noise,y_gts_noise,label="Ground Truth")
+plt.plot(x_encoder,y_encoder,'-.',linewidth=2,markersize=4,label="Encoder Only")
 plt.plot(x_filter,y_filter,'--',linewidth=2,markersize=4,label="EKF fusion")
 #plt.plot(x_pose2d,y_pose2d,label="LidarSM")
-plt.legend(("Reference Trajactory","Ground_Truth","Encoder_Only","EKF fusion"), loc='upper left', shadow=True,fontsize=10)
-plt.tick_params(axis='both', which='major', labelsize=10)
-plt.xlabel("X(m)",fontsize=10)
-plt.ylabel("Y(m)",fontsize=10)
+plt.legend(("Reference Trajactory","Ground Truth","Encoder Only","EKF fusion"), loc='upper left', shadow=True,fontsize=20)
+plt.tick_params(axis='both', which='major', labelsize=20)
+plt.xlabel("X(m)",fontsize=20)
+plt.ylabel("Y(m)",fontsize=20)
 
 plt.show()
