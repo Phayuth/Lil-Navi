@@ -11,7 +11,7 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 # Reference Pose===================================================================================
 
 def ref_cicle(t):
-	freq   = 0.01745#2*np.pi/30
+	freq   = 2*np.pi/30
 	radius = 3
 
 	x     = radius*np.cos(freq*t)
@@ -78,13 +78,14 @@ class backstp_contrl:
 
 		T = np.array([[np.cos(theta),np.sin(theta),0],
 		             [-np.sin(theta),np.cos(theta),0],
-		             [      0         ,     0         ,1]]) # (3X3)
+		             [      0       ,     0       ,1]]) # (3X3)
 
-		return T.dot(qr - qc) # (3X1)
+		e = qr - qc
+		return T.dot(e) # (3X1)
 
 	def controlkinematic(self,qe,vr,wr):
 		""" Control Algorithm for Kinematic, return : vc, wc"""
-		return (vr*np.cos(qe[2,0]))+self.k1*qe[0,0],wr+(self.k2*vr*qe[1,0])*(self.k3*np.sin(qe[2,0]))
+		return ((vr*np.cos(qe[2,0]))+self.k1*qe[0,0]),(wr+(self.k2*vr*qe[1,0])*(self.k3*np.sin(qe[2,0])))
 
 	def controldynamics(self,vdotref,wdotref):
 		""" Control Algorithm for Dynamics, z1= vref-vcur , z2 = wref-wcur, return : tua1c, tua2c """
@@ -102,12 +103,12 @@ def odm_callback(msg):
 	qc = np.array([[x],[y],[yw]])
 
 	# Find Desired Pose
-	xRef,yRef,vr,wr,ydot,xdot,vdotref,wdotref = ref_sin_45(sq)
+	xRef,yRef,vr,wr,ydot,xdot,vdotref,wdotref = ref_cicle(sq)
 	theta_ref = np.arctan2(ydot, xdot)
 	qr = np.array([[xRef],[yRef],[theta_ref]])
 
 	# Control Input
-	contl = backstp_contrl(10,5,4,100,3000,4,0.1,0.2,2.5) # k1,k2,k3,ka,kb need Tuning
+	contl = backstp_contrl(10,5,4,100,3000,4,0.1,0.26,2.5) # k1,k2,k3,ka,kb need Tuning
 	qe = contl.error(qr,qc)
 	vc,wc = contl.controlkinematic(qe,vr,wr)
 
@@ -116,10 +117,10 @@ def odm_callback(msg):
 		vc = 1
 	if vc < -1:
 		vc = -1
-	if wc > 1:
-		wc = 1
-	if wc < -1:
-		wc = -1
+	if wc > 0.5:
+		wc = 0.5
+	if wc < -0.5:
+		wc = -0.5
 
 	tw_p = rospy.Publisher("/robotros_test/cmd_vel", Twist, queue_size = 50)
 	Twm = Twist()

@@ -13,7 +13,7 @@ def callb(msg):
 
 def main():
 	rospy.init_node("odom_view")
-	rospy.Subscriber("/ground_truth/state",Odometry,callb)
+	rospy.Subscriber("/odom_filter",Odometry,callb) #/ground_truth/state
 	rospy.spin()
 
 if __name__ == '__main__':
