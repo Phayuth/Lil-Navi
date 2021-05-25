@@ -10,8 +10,8 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 # Reference Pose===================================================================================
 
-def ref_cicle(t):
-	freq   = 0.01745#2*np.pi/30
+def ref_circle(t):
+	freq   = 0.005
 	radius = 3
 
 	x     = radius*np.cos(freq*t)
@@ -28,7 +28,7 @@ def ref_cicle(t):
 	ydddot= -radius*(freq**3)*np.cos(freq*t)
 
 	vr    = np.sqrt(((xdot**2) + (ydot**2)))
-	wr    = ((xdot*yddot-ydot*xddot))/((xdot**2 + ydot**2))
+	wr    = ((xdot*yddot)-(ydot*xddot))/((xdot**2) + (ydot**2))
 
 	vdotr = (xdot*xddot+ydot*yddot)/vr
 	wdotr = ((xdot*ydddot-ydot*xdddot)/(vr**2))-((2*wr*vdotr)/vr)
@@ -36,29 +36,30 @@ def ref_cicle(t):
 	return x,y,theta_ref,vr,wr,ydot,xdot,vdotr,wdotr
 
 def ref_8(t):
-	freq   = 0.01745#2*np.pi/30
-	a = 3
+	freq   = 0.001
+	a = 5
 
 	x     = a*np.sin(freq*t)
-	y     = a*np.sin(freq*t)*np.cos(freq*t)
+	y     = a*np.sin(2*freq*t)
 
-	xdot  = a*np.cos(freq*t)
-	ydot  = a*((np.cos(freq*t))**2 - (np.sin(freq*t))**2)
+	xdot  = a*freq*np.cos(freq*t)
+	ydot  = 2*a*freq*np.cos(2*freq*t)
 	theta_ref = np.arctan2(ydot, xdot)
 
-	xddot = -a*np.sin(freq*t)
-	yddot = -a*4*np.sin(freq*t)*np.cos(freq*t)
+	xddot = -a*(freq**2)*np.sin(freq*t)
+	yddot = -4*a*(freq**2)*np.sin(2*freq*t)
 
-	xdddot= -a*np.cos(freq*t)
-	ydddot= a*4*((np.cos(freq*t))**2 - (np.sin(freq*t))**2)
+	xdddot= -a*(freq**3)*np.cos(freq*t)
+	ydddot= -8*a*(freq**3)*np.cos(2*freq*t)
 
-	vr    = np.sqrt((xdot**2 + ydot**2))
-	wr    = ((xdot*yddot-ydot*xddot))/((xdot**2 + ydot**2))
+	vr    = np.sqrt(((xdot**2) + (ydot**2)))
+	wr    = ((xdot*yddot)-(ydot*xddot))/((xdot**2) + (ydot**2))
 
 	vdotr = (xdot*xddot+ydot*yddot)/vr
 	wdotr = ((xdot*ydddot-ydot*xdddot)/(vr**2))-((2*wr*vdotr)/vr)
 
 	return x,y,theta_ref,vr,wr,ydot,xdot,vdotr,wdotr
+
 #===================================================================================================
 
 class backstp_contrl:
@@ -95,7 +96,7 @@ class backstp_contrl:
 
 sq = 0
 def odm_callback(msg):
-	global i
+	global sq
 	# Find Current Pose
 	x = msg.pose.pose.position.x
 	y = msg.pose.pose.position.y
@@ -105,19 +106,24 @@ def odm_callback(msg):
 	qc = np.array([[x],[y],[yw]])
 
 	# Find Desired Pose
-	xRef,yRef,theta_ref,vr,wr,ydot,xdot,vdotref,wdotref = ref_cicle(sq)
+	xRef,yRef,theta_ref,vr,wr,ydot,xdot,vdotref,wdotref = ref_8(sq)
 	qr = np.array([[xRef],[yRef],[theta_ref]])
 
-	# Control Input
-	contl = backstp_contrl(0.1,4,4,100,3000,4,0.1,0.26,2.5) #run along circle but not on the command one but stable
-	#contl = backstp_contrl(0.00001,0.00001,0.00001,100,3000,4,0.1,0.26,2.5)
+	# Control init for each trajectory
+	#contl = backstp_contrl(0.7,20,20,100,3000,4,0.1,0.26,2.5) # For ref_circle
+	contl = backstp_contrl(0.7,20,20,100,3000,4,0.1,0.26,2.5) # For ref_8
+
+	# Find error and control
 	qe = contl.error(qr,qc)
 	vc,wc = contl.controlkinematic(qe,vr,wr)
 
-	rospy.loginfo(str(xRef)+" , "+str(yRef)+" , "+str(theta_ref))
+	# Print some output
+	#rospy.loginfo(str(xRef)+" , "+str(yRef)+" , "+str(theta_ref)+" , "+str(yw))
 	#rospy.loginfo("delx = "+str(qe[0,0])+" , "+"dely = "+str(qe[1,0])+" , "+"delt ="+str(qe[2,0]))
 	#rospy.loginfo(str(vr)+" , "+str(wr)+" , "+str(theta_ref))
+	rospy.loginfo("t_ref = "+str(theta_ref)+" , "+" t_c = "+str(yw)+" , err = "+str(qe[2,0]))
 
+	# Publish to ROS
 	tw_p = rospy.Publisher("/robotros_test/cmd_vel", Twist, queue_size = 50)
 	Twm = Twist()
 	Twm.linear.x = vc
