@@ -7,8 +7,8 @@ from nav_msgs.msg import Odometry
 
 def callb(msg):
 	(r,p,y) = tf.transformations.euler_from_quaternion([msg.pose.pose.orientation.x,msg.pose.pose.orientation.y,msg.pose.pose.orientation.z,msg.pose.pose.orientation.w])
-	if y<0:
-		y = math.pi + (math.pi+y)
+	# if y<0:
+	# 	y = math.pi + (math.pi+y)
 	rospy.loginfo("yaw = "+str(y))
 
 def main():

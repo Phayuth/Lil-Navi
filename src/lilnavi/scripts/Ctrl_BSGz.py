@@ -36,8 +36,8 @@ def ref_circle(t):
 	return x,y,theta_ref,vr,wr,ydot,xdot,vdotr,wdotr
 
 def ref_8(t):
-	freq   = 0.001
-	a = 5
+	freq   = 0.002
+	a = 2.5
 
 	x     = a*np.sin(freq*t)
 	y     = a*np.sin(2*freq*t)
@@ -61,6 +61,17 @@ def ref_8(t):
 	return x,y,theta_ref,vr,wr,ydot,xdot,vdotr,wdotr
 
 #===================================================================================================
+def angnorm(theta):
+
+	if theta>0:
+		if theta>np.pi:
+			theta = (2*np.pi-theta)*(-1)
+
+	if theta<0:
+		if theta*(-1)>np.pi:
+			theta = (2*np.pi-(-theta))*(-1)
+
+	return theta
 
 class backstp_contrl:
 
@@ -118,10 +129,7 @@ def odm_callback(msg):
 	vc,wc = contl.controlkinematic(qe,vr,wr)
 
 	# Print some output
-	#rospy.loginfo(str(xRef)+" , "+str(yRef)+" , "+str(theta_ref)+" , "+str(yw))
-	#rospy.loginfo("delx = "+str(qe[0,0])+" , "+"dely = "+str(qe[1,0])+" , "+"delt ="+str(qe[2,0]))
-	#rospy.loginfo(str(vr)+" , "+str(wr)+" , "+str(theta_ref))
-	rospy.loginfo("t_ref = "+str(theta_ref)+" , "+" t_c = "+str(yw)+" , err = "+str(qe[2,0]))
+	rospy.loginfo("thetaref = "+str(theta_ref)+"       thetac = "+str(qc[2,0]))
 
 	# Publish to ROS
 	tw_p = rospy.Publisher("/robotros_test/cmd_vel", Twist, queue_size = 50)
