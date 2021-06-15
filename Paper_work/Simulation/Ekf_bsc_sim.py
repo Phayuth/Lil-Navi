@@ -195,5 +195,9 @@ for x in range(930):
 	#drawnow(makeFig)
 	time += 0.033
 
+# f = open("case2_record1_allpose.txt", "w")
+# f.write("Now the file has more content!")
+# f.close()
+
 makeFig()
 plt.show()
